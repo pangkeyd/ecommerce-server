@@ -50,18 +50,32 @@ function getItemByUser(params, cb){
 }
 
 function saveItem(body, file, cb){
-  let itemSchema = new Item({
-    name: body.name,
-    price: body.price,
-    image: file.cloudStorageObject,
-    author: body.author
-  })
-  itemSchema.save((err, item) => {
-    if(err){
-      res.status(200).send(err)
-    }
-    cb(item)
-  })
+  if (file) {
+    let itemSchema = new Item({
+      name: body.name,
+      price: body.price,
+      image: file.cloudStorageObject,
+      author: body.author
+    })
+    itemSchema.save((err, item) => {
+      if(err){
+        res.status(200).send(err)
+      }
+      cb(item)
+    })
+  } else {
+    let itemSchema = new Item({
+      name: body.name,
+      price: body.price,
+      author: body.author
+    })
+    itemSchema.save((err, item) => {
+      if(err){
+        res.status(200).send(err)
+      }
+      cb(item)
+    })
+  }
 }
 
 function deleteItem(id, cb){
